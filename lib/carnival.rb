@@ -3,11 +3,13 @@ require './lib/ride'
 
 class Carnival
   attr_reader :duration,
-              :rides
+              :rides,
+              :summary
 
   def initialize(duration)
     @duration = duration
     @rides = []
+    @summary = {}
   end
 
   def add_ride(ride)
@@ -27,6 +29,19 @@ class Carnival
   end
 
   def total_revenue
+    @rides.sum do |ride|
+      ride.total_revenue
+    end
+  end
+
+
+
+  def visitor_count
+    total_visitors = @rides.flat_map { |ride| ride.rider_log.keys }
+    total_visitors.uniq.length
+  end
+
+  def revenue_earned
     @rides.sum do |ride|
       ride.total_revenue
     end
